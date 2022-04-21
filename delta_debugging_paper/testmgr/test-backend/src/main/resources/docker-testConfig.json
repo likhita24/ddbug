@@ -1,0 +1,18 @@
+{
+  "testDir": "/app/test",
+  "classDir": "/test",
+  "testCases":{
+    "Delta Test":[
+      "TestSearchTicketConfig",
+      "TestLoginErrorInstance2",
+      "TestMiniSequenceError",
+      "TestBookErrorConfig",
+      "TestF12"
+    ],
+    "Ticket Reserve":[
+      "TestServiceLogin",
+      "TestServiceContacts"
+    ]
+
+  }
+}

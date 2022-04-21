@@ -1,0 +1,71 @@
+fieldset{padding:.35em .625em .75em;margin:0 2px;border:1px solid silver}
+
+legend{padding:.5em;border:0;width:auto}
+
+html, body{
+    margin:0px;
+    padding:0px;
+    height:100%;
+}
+
+header{
+    /*very important, otherwise there will be a gap between div and body*/
+    display: block;
+    /*background-color:#aeb2b7 ;*/
+    height:50px;
+    width:100%;
+    line-height: 50px;
+    margin: 0px 0px;
+    vertical-align: middle;
+    color:#666;
+}
+
+p{
+    margin-left: 10px;
+    font-size:18px;
+}
+
+#navigation{
+    background-color: #2a3542;
+    color: #FFFFFF;
+    height:100%;
+    width:10%;
+    float: left;
+}
+
+a{
+    text-decoration: none;
+    color: #aeb2b7;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: none;
+    color: #FFFFFF;
+}
+
+a:visited{
+    text-decoration: none;
+}
+
+#navigation li{
+    list-style: none;
+    height:40px;
+    line-height: 40px;
+    font-size: 18px;
+    padding-left: 10px;
+    border-radius:2px;
+    margin-bottom: 10px;
+}
+
+li.active{
+    background-color: #a2abb6;
+    color: #000;
+}
+
+/*instance*/
+
+
