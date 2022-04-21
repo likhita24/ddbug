@@ -3,31 +3,30 @@ package deltabackend.domain.api.request;
 import java.util.ArrayList;
 
 public class SetAsyncRequestSequenceRequest {
-    private String clusterName;
-
-    private ArrayList<String> svcList;
+    private String Clus_name;
+    private ArrayList<String> svcl;
 
     public SetAsyncRequestSequenceRequest() {
         //do nothing
     }
 
     public String getClusterName() {
-        return clusterName;
+        return Clus_name;
     }
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
+    public void setClusterName(String Clus_name) {
+        this.Clus_name = Clus_name;
     }
 
-    public SetAsyncRequestSequenceRequest(ArrayList<String> svcList) {
-        this.svcList = svcList;
+    public SetAsyncRequestSequenceRequest(ArrayList<String> svcl) {
+        this.svcl = svcl;
     }
 
     public ArrayList<String> getSvcList() {
-        return svcList;
+        return svcl;
     }
 
-    public void setSvcList(ArrayList<String> svcList) {
-        this.svcList = svcList;
+    public void setSvcList(ArrayList<String> svcl) {
+        this.svcl = svcl;
     }
 }

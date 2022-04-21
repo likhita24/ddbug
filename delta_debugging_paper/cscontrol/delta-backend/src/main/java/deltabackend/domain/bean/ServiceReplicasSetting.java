@@ -1,27 +1,27 @@
 package deltabackend.domain.bean;
 
 public class ServiceReplicasSetting implements Cloneable{
-    private String serviceName;
-    private int numOfReplicas;
+    private String sern;
+    private int numR;
 
     public ServiceReplicasSetting(){
 
     }
 
     public String getServiceName() {
-        return serviceName;
+        return sern;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServiceName(String sern) {
+        this.sern = sern;
     }
 
     public int getNumOfReplicas() {
-        return numOfReplicas;
+        return numR;
     }
 
-    public void setNumOfReplicas(int numOfReplicas) {
-        this.numOfReplicas = numOfReplicas;
+    public void setNumOfReplicas(int numR) {
+        this.numR = numR;
     }
 
     @Override
@@ -32,8 +32,8 @@ public class ServiceReplicasSetting implements Cloneable{
         }catch(CloneNotSupportedException e) {
             e.printStackTrace();
         }
-        p.setServiceName(this.serviceName);
-        p.setNumOfReplicas(this.numOfReplicas);
+        p.setServiceName(this.sern);
+        p.setNumOfReplicas(this.numR);
         return p;
     }
 }

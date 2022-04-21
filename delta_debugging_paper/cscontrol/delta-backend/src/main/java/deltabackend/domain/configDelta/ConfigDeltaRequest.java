@@ -1,14 +1,12 @@
 package deltabackend.domain.configDelta;
 
 import deltabackend.domain.bean.SingleDeltaCMResourceRequest;
-
 import java.util.List;
 
 public class ConfigDeltaRequest {
-
     String id;
-    List<SingleDeltaCMResourceRequest> configs;
-    List<String> tests;
+    List<SingleDeltaCMResourceRequest> confs;
+    List<String> ts;
 
 
     public String getId() {
@@ -20,20 +18,20 @@ public class ConfigDeltaRequest {
     }
 
     public List<SingleDeltaCMResourceRequest> getConfigs() {
-        return configs;
+        return confs;
     }
 
-    public void setConfigs(List<SingleDeltaCMResourceRequest> configs) {
-        this.configs = configs;
+    public void setConfigs(List<SingleDeltaCMResourceRequest> confs) {
+        this.confs = confs;
     }
 
 
     public List<String> getTests() {
-        return tests;
+        return ts;
     }
 
-    public void setTests(List<String> tests) {
-        this.tests = tests;
+    public void setTests(List<String> ts) {
+        this.ts = ts;
     }
 
 

@@ -4,29 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SingleSequenceDelta {
-
-    String sender;
-    ArrayList<String> receivers;
+    String sen;
+    ArrayList<String> rec;
 
     public SingleSequenceDelta(){
 
     }
 
-
     public String getSender() {
-        return sender;
+        return sen;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setSender(String sen) {
+        this.sen = sen;
     }
 
     public ArrayList<String> getReceivers() {
-        return receivers;
+        return rec;
     }
 
-    public void setReceivers(ArrayList<String> receivers) {
-        this.receivers = receivers;
+    public void setReceivers(ArrayList<String> rec) {
+        this.rec = rec;
     }
 
 

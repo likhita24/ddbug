@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TestLoginErrorInstance {
     private WebDriver driver;
-    private String trainType;//0--all,1--GaoTie,2--others
+    private String trainType;
     private String baseUrl;
     private int loginNumber;
     public static void login(WebDriver driver,String username,String password){
@@ -40,9 +40,6 @@ public class TestLoginErrorInstance {
     }
     @BeforeClass
     public void setUp() throws Exception {
-//        System.setProperty("webdriver.chrome.driver", "F:/app/new/chromedriver.exe");
-//        driver = new ChromeDriver();
-//        baseUrl = "http://10.141.211.178:32412";
         driver = new RemoteWebDriver(new URL("http://hub:4444/wd/hub"),
                 DesiredCapabilities.chrome());
         baseUrl = "http://10.141.211.178:30014";
@@ -51,15 +48,12 @@ public class TestLoginErrorInstance {
     }
 
     @Test
-    //Test Flow Preserve Step 1: - Login
     public void testLogin1()throws Exception{
         driver.get(baseUrl + "/");
 
-        //define username and password
-        String username = "fdse_microservices@163.com";
+        String username = "iitj_ms@iitj.ac.in";
         String password = "DefaultPassword";
 
-        //call function login
         login(driver,username,password);
         Thread.sleep(50000);
         if( !getLoginStatus()){
@@ -77,10 +71,6 @@ public class TestLoginErrorInstance {
                 }
             }
         }
-
-
-        //get login status
-//        getLoginStatus();
 
         loginNumber = Integer.parseInt(driver.findElement(By.id("login-people-number")).getAttribute("value"));
         System.out.println("********* first login number: " + loginNumber);
@@ -117,9 +107,7 @@ public class TestLoginErrorInstance {
         int n = Integer.parseInt(driver.findElement(By.id("login-people-number")).getAttribute("value"));
         System.out.println("********* final login number: " + n);
         Assert.assertEquals( n, loginNumber+3);
-
     }
-
 
     private boolean getLoginStatus(){
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();",  driver.findElement(By.id("flow_preserve_login_msg")));
@@ -137,7 +125,6 @@ public class TestLoginErrorInstance {
             return false;
         }
     }
-
 
     @AfterClass
     public void tearDown() throws Exception {

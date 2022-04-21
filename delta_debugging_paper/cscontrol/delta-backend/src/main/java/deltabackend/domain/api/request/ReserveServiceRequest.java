@@ -3,7 +3,7 @@ package deltabackend.domain.api.request;
 import java.util.List;
 
 public class ReserveServiceRequest {
-    private String clusterName;
+    private String Clus_name;
     private List<String> services;
 
     public ReserveServiceRequest(){
@@ -11,11 +11,11 @@ public class ReserveServiceRequest {
     }
 
     public String getClusterName() {
-        return clusterName;
+        return Clus_name;
     }
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
+    public void setClusterName(String Clus_name) {
+        this.Clus_name = Clus_name;
     }
 
     public List<String> getServices() {

@@ -2,23 +2,22 @@ package deltabackend.domain.configDelta;
 
 import deltabackend.domain.bean.SingleDeltaCMResourceRequest;
 import deltabackend.domain.test.DeltaTestResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigDeltaResponse {
-    boolean status;
-    String message;
+    boolean sts;
+    String msg;
     List<SingleDeltaCMResourceRequest> env = new ArrayList<SingleDeltaCMResourceRequest>();
-    DeltaTestResponse result;
-    boolean diffFromFirst;//different from the first test result, highlight it
+    DeltaTestResponse res;
+    boolean dFF;
 
     public DeltaTestResponse getResult() {
-        return result;
+        return res;
     }
 
-    public void setResult(DeltaTestResponse result) {
-        this.result = result;
+    public void setResult(DeltaTestResponse res) {
+        this.res = res;
     }
 
     public List<SingleDeltaCMResourceRequest> getEnv() {
@@ -30,28 +29,26 @@ public class ConfigDeltaResponse {
     }
 
     public boolean isStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatus(boolean sts) {
+        this.sts = sts;
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
 
     public boolean isDiffFromFirst() {
-        return diffFromFirst;
+        return dFF;
     }
 
-    public void setDiffFromFirst(boolean diffFromFirst) {
-        this.diffFromFirst = diffFromFirst;
+    public void setDiffFromFirst(boolean dFF) {
+        this.dFF = dFF;
     }
-
-
 }

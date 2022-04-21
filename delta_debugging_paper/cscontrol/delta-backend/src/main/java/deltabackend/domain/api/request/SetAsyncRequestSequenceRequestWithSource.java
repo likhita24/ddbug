@@ -3,43 +3,41 @@ package deltabackend.domain.api.request;
 import java.util.ArrayList;
 
 public class SetAsyncRequestSequenceRequestWithSource {
-    private String clusterName;
-
-    private String sourceName;
-
-    private ArrayList<String> svcList;
+    private String Clus_name;
+    private String scr_name;
+    private ArrayList<String> svcl;
 
     public SetAsyncRequestSequenceRequestWithSource() {
         //do nothing
     }
 
-    public SetAsyncRequestSequenceRequestWithSource(String clusterName, String sourceName, ArrayList<String> svcList) {
-        this.clusterName = clusterName;
-        this.sourceName = sourceName;
-        this.svcList = svcList;
+    public SetAsyncRequestSequenceRequestWithSource(String Clus_name, String scr_name, ArrayList<String> svcl) {
+        this.Clus_name = Clus_name;
+        this.scr_name = scr_name;
+        this.svcl = svcl;
     }
 
     public String getClusterName() {
-        return clusterName;
+        return Clus_name;
     }
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
+    public void setClusterName(String Clus_name) {
+        this.Clus_name = Clus_name;
     }
 
     public String getSourceName() {
-        return sourceName;
+        return scr_name;
     }
 
-    public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
+    public void setSourceName(String scr_name) {
+        this.scr_name = scr_name;
     }
 
     public ArrayList<String> getSvcList() {
-        return svcList;
+        return svcl;
     }
 
-    public void setSvcList(ArrayList<String> svcList) {
-        this.svcList = svcList;
+    public void setSvcList(ArrayList<String> svcl) {
+        this.svcl = svcl;
     }
 }

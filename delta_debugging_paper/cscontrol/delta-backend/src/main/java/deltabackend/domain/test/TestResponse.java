@@ -1,50 +1,47 @@
 package deltabackend.domain.test;
 
 import deltabackend.domain.test.MyTestResult;
-
 import java.util.List;
 
 public class TestResponse {
-
-    private boolean status;
-    private String message;
-    private Integer[] resultCount;
-    private List<MyTestResult> resultList;
+    private boolean sts;
+    private String msg;
+    private Integer[] cnt_res;
+    private List<MyTestResult> list_res;
 
     public TestResponse(){
 
     }
 
     public Integer[] getResultCount() {
-        return resultCount;
+        return cnt_res;
     }
 
-    public void setResultCount(Integer[] resultCount) {
-        this.resultCount = resultCount;
+    public void setResultCount(Integer[] cnt_res) {
+        this.cnt_res = cnt_res;
     }
 
     public boolean isStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatus(boolean sts) {
+        this.sts = sts;
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
 
     public List<MyTestResult> getResultList() {
-        return resultList;
+        return list_res;
     }
 
-    public void setResultList(List<MyTestResult> resultList) {
-        this.resultList = resultList;
+    public void setResultList(List<MyTestResult> list_res) {
+        this.list_res = list_res;
     }
-
 }

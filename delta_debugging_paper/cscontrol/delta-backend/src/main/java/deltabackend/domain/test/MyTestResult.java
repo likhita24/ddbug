@@ -1,56 +1,52 @@
 package deltabackend.domain.test;
 
 public class MyTestResult {
-
-    String status; //failure/success/skip
-    String className;
-    String methodName;
-    String startTime;//when it start to run
-    long duration;//how long it run
-
+    String sts; 
+    String cName;
+    String mName;
+    String sTime;
+    long dur;
 
     public MyTestResult(){
 
     }
     public String getClassName() {
-        return className;
+        return cName;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setClassName(String cName) {
+        this.cName = cName;
     }
 
     public String getMethodName() {
-        return methodName;
+        return mName;
     }
 
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
+    public void setMethodName(String mName) {
+        this.mName = mName;
     }
 
     public String getStartTime() {
-        return startTime;
+        return sTime;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setStartTime(String sTime) {
+        this.sTime = sTime;
     }
 
     public long getDuration() {
-        return duration;
+        return dur;
     }
 
-    public void setDuration(long duration) {
-        this.duration = duration;
+    public void setDuration(long dur) {
+        this.dur = dur;
     }
 
     public String getStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(String sts) {
+        this.sts = sts;
     }
-
-
 }

@@ -2,11 +2,11 @@ package deltabackend.util;
 
 public class Cluster {
     private String name;
-    private String masterIp;
-    private String username;
-    private String passwd;
+    private String IP_mas;
+    private String user;
+    private String pwd;
     private String token;
-    private String apiServer;
+    private String apis;
 
     public Cluster(){
 
@@ -21,35 +21,35 @@ public class Cluster {
     }
 
     public String getMasterIp() {
-        return masterIp;
+        return IP_mas;
     }
 
-    public void setMasterIp(String masterIp) {
-        this.masterIp = masterIp;
+    public void setMasterIp(String IP_mas) {
+        this.IP_mas = IP_mas;
     }
 
     public String getUsername() {
-        return username;
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String user) {
+        this.user = user;
     }
 
     public String getPasswd() {
-        return passwd;
+        return pwd;
     }
 
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
+    public void setPasswd(String pwd) {
+        this.pwd = pwd;
     }
 
     public String getApiServer() {
-        return apiServer;
+        return apis;
     }
 
-    public void setApiServer(String apiServer) {
-        this.apiServer = apiServer;
+    public void setApiServer(String apis) {
+        this.apis = apis;
     }
 
     public String getToken() {

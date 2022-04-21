@@ -1,42 +1,37 @@
 package deltabackend.domain.api.request;
 
 public class SetUnsetServiceRequestSuspendRequest {
-
     public static final int SET_TO_SUSPEND = 1;
-
     public static final int UNSET_SUSPEND = 2;
 
-    private String clusterName;
-
-    private String sourceSvcName;
-
+    private String Clus_name;
+    private String ssn;
     private String svc;
-
 
     public SetUnsetServiceRequestSuspendRequest() {
         //do nothing
     }
 
-    public SetUnsetServiceRequestSuspendRequest(String clusterName, String sourceSvcName, String svc) {
-        this.clusterName = clusterName;
-        this.sourceSvcName = sourceSvcName;
+    public SetUnsetServiceRequestSuspendRequest(String Clus_name, String ssn, String svc) {
+        this.Clus_name = Clus_name;
+        this.ssn = ssn;
         this.svc = svc;
     }
 
     public String getClusterName() {
-        return clusterName;
+        return Clus_name;
     }
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
+    public void setClusterName(String Clus_name) {
+        this.Clus_name = Clus_name;
     }
 
     public String getSourceSvcName() {
-        return sourceSvcName;
+        return ssn;
     }
 
-    public void setSourceSvcName(String sourceSvcName) {
-        this.sourceSvcName = sourceSvcName;
+    public void setSourceSvcName(String ssn) {
+        this.ssn = ssn;
     }
 
     public String getSvc() {
@@ -46,5 +41,4 @@ public class SetUnsetServiceRequestSuspendRequest {
     public void setSvc(String svc) {
         this.svc = svc;
     }
-
 }

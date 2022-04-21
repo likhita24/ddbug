@@ -3,26 +3,26 @@ package deltabackend.domain.api.request;
 import java.util.List;
 
 public class DeltaNodeRequest {
-    private String clusterName;
-    private List<String> nodeNames;
+    private String Clus_name;
+    private List<String> Node_name;
 
     public  DeltaNodeRequest(){
 
     }
 
-    public String getClusterName() {
-        return clusterName;
+    public String getClus_name() {
+        return Clus_name;
     }
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
+    public void setClus_name(String Clus_name) {
+        this.Clus_name = Clus_name;
     }
 
     public List<String> getNodeNames() {
-        return nodeNames;
+        return Node_name;
     }
 
-    public void setNodeNames(List<String> nodeNames) {
-        this.nodeNames = nodeNames;
+    public void setNodeNames(List<String> Node_name) {
+        this.Node_name = Node_name;
     }
 }

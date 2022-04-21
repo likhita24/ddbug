@@ -74,7 +74,6 @@ public class DeltaServiceImpl implements DeltaService{
             if(null != message.getCluster()){
                 cluster = message.getCluster();
             }
-            //query for the env services' instance number
             GetServiceReplicasResponse gsrp = queryServicesReplicas(envStrings, cluster);
             List<ServiceWithReplicas> env = null;
             if(gsrp.isStatus()){
@@ -106,18 +105,6 @@ public class DeltaServiceImpl implements DeltaService{
             ((InstanceDDMinDeltaExt)ddmin_delta).recoverEnv();
         }
     }
-
-
-//    private DeltaTestResponse deltaTests(List<String> testNames){
-//        DeltaTestRequest dtr = new DeltaTestRequest();
-//        dtr.setTestNames(testNames);
-//        DeltaTestResponse result = restTemplate.postForObject(
-//                "http://test-backend:5001/testBackend/deltaTest",dtr,
-//                DeltaTestResponse.class);
-//        return result;
-//    }
-
-    //query for the env services' instance number
     private GetServiceReplicasResponse queryServicesReplicas(List<String> envStrings, String cluster){
         GetServiceReplicasRequest gsrr = new GetServiceReplicasRequest();
         gsrr.setServices(envStrings);
@@ -130,8 +117,6 @@ public class DeltaServiceImpl implements DeltaService{
         return gsrp;
     }
 
-
-    //adjust the instance number
     @Override
     public SetServiceReplicasResponse setInstanceNumOfServices(List<ServiceReplicasSetting> env, String cluster) {
         SetServiceReplicasRequest ssrr = new SetServiceReplicasRequest();
@@ -142,7 +127,6 @@ public class DeltaServiceImpl implements DeltaService{
                 SetServiceReplicasResponse.class);
         return ssresult;
     }
-
 
     @Override
     public void simpleSetInstance(SimpleInstanceRequest message) {
@@ -170,22 +154,6 @@ public class DeltaServiceImpl implements DeltaService{
             }
         }
     }
-
-
-//    private boolean judgeDiffer(DeltaTestResponse first, DeltaTestResponse dtr){
-//        List<DeltaTestResult> l1 = first.getDeltaResults();
-//        List<DeltaTestResult> l2 = dtr.getDeltaResults();
-//        if(l1.size() == l2.size()){
-//            for(int i = 0; i < l1.size(); i ++){
-//                if( ! l1.get(i).getStatus().equals(l2.get(i).getStatus())){
-//                    return true;
-//                }
-//            }
-//        } else {
-//            return true;
-//        }
-//        return false;
-//    }
 
     private MessageHeaders createHeaders(String sessionId) {
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
@@ -224,14 +192,6 @@ public class DeltaServiceImpl implements DeltaService{
         }
     }
 
-//    @Override
-//    public ReserveServiceResponse extractServices(ExtractServiceRequest testCases) {
-//        runTestCases(testCases.getTests(), cluster);
-//        List<String> servicesNames = getServicesFromZipkin();
-//        return extract(servicesNames);
-//    }
-
-    //zero, restart the zipkin
     private RestartServiceResponse restartZipkin(String cluster){
         RestartServiceResponse result = restTemplate.getForObject(
                 "http://api-server:18898/api/restartService/" + cluster,
@@ -239,7 +199,6 @@ public class DeltaServiceImpl implements DeltaService{
         return result;
     }
 
-    //first, run testcases
     private void runTestCases(List<String> testCaseNames, String cluster){
         DeltaTestRequest dtr = new DeltaTestRequest();
         dtr.setTestNames(testCaseNames);
@@ -249,7 +208,6 @@ public class DeltaServiceImpl implements DeltaService{
                 DeltaTestResponse.class);
     }
 
-    //second, get all the needed services' name from zipkin
     public List<String> getServicesFromZipkin(String cluster){
         System.out.println("====== Zipkin URL ====" + myConfig.getZipkinUrl().get(cluster));
         List result = restTemplate.getForObject(
@@ -257,7 +215,6 @@ public class DeltaServiceImpl implements DeltaService{
         Iterator it = result.iterator();
         List<String> serviceNames = new ArrayList<String>();
         while(it.hasNext()){
-            //cast to String
             String s = (String)it.next();
             serviceNames.add(s);
             System.out.println("======zipkin===services==name====");
@@ -265,8 +222,6 @@ public class DeltaServiceImpl implements DeltaService{
         }
         return serviceNames;
     }
-
-    //third, let k8s stop the services except services names from zipkin
     private ReserveServiceResponse extract(List<String> serviceNames, String cluster){
         ReserveServiceRequest rsr = new ReserveServiceRequest();
         rsr.setServices(serviceNames);
@@ -281,7 +236,6 @@ public class DeltaServiceImpl implements DeltaService{
         return r;
     }
 
-
 ////////////////////////////////Node Delta/////////////////////////////////////////////
     @Override
     public void nodeDelta(NodeDeltaRequest message) {
@@ -289,7 +243,6 @@ public class DeltaServiceImpl implements DeltaService{
             System.out.println("=============Get one node delta request=============");
             String sessionId=webAgentSessionRegistry.getSessionIds(message.getId()).stream().findFirst().get();
             System.out.println("sessionid = " + sessionId);
-            //get cluster name
             String cluster = "cluster1";
             if(null != message.getCluster()){
                 cluster = message.getCluster();
@@ -305,15 +258,6 @@ public class DeltaServiceImpl implements DeltaService{
 
         }
     }
-
-//    @Override
-//    public DeltaNodeByListResponse deleteNodesByList(DeltaNodeRequest list) {
-//        DeltaNodeByListResponse result = restTemplate.postForObject(
-//                "http://api-server:18898/api/deleteNodeByList",list,
-//                DeltaNodeByListResponse.class);
-//        return result;
-//    }
-
 
     ///////////////////////////////////////Config Delta/////////////////////////////////////////////
     @Override
@@ -420,8 +364,6 @@ public class DeltaServiceImpl implements DeltaService{
         return newList;
     }
 
-
-
     //////////////////////////////////////// Sequence Delta /////////////////////////////////////////////////
 
     @Override
@@ -488,7 +430,5 @@ public class DeltaServiceImpl implements DeltaService{
             template.convertAndSendToUser(sessionId,"/topic/mixerDeltaEnd" ,r, createHeaders(sessionId));
             ((MixerDDMinDeltaExt)ddmin_delta).recoverEnv();
         }
-
     }
-
 }

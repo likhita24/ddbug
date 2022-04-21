@@ -11,7 +11,6 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TestBookErrorConfig {
     private WebDriver driver;
-    private String trainType;/
+    private String trainType;
     private String baseUrl;
     public static void login(WebDriver driver,String username,String password){
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();",  driver.findElement(By.id("flow_one_page")));
@@ -32,9 +31,7 @@ public class TestBookErrorConfig {
         driver.findElement(By.id("flow_preserve_login_password")).sendKeys(password);
         driver.findElement(By.id("flow_preserve_login_button")).click();
     }
-    
     public static String getRandomString(int length) {
-        
         String KeyString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuffer sb = new StringBuffer();
         int len = KeyString.length();
@@ -45,24 +42,20 @@ public class TestBookErrorConfig {
     }
     @BeforeClass
     public void setUp() throws Exception {
-
         driver = new RemoteWebDriver(new URL("http://hub:4444/wd/hub"),
                 DesiredCapabilities.chrome());
         baseUrl = "http://10.141.211.179:30914";
-        trainType = "0";
+        trainType = "0";//all
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @Test
-    
     public void testLogin()throws Exception{
         driver.get(baseUrl + "/");
 
-      
-        String username = "fdse_microservices@163.com";
+        String username = "iitj_ms@iitj.ac.in";
         String password = "DefaultPassword";
 
-        
         Thread.sleep(30000);
         login(driver,username,password);
         Thread.sleep(10000);
@@ -79,7 +72,6 @@ public class TestBookErrorConfig {
             }
         }
 
-   
         String statusLogin = driver.findElement(By.id("flow_preserve_login_msg")).getText();
         if("".equals(statusLogin))
             System.out.println("Failed to Login! Status is Null!");
@@ -91,19 +83,16 @@ public class TestBookErrorConfig {
     }
 
     @Test (dependsOnMethods = {"testLogin"})
-   
+
     public void testBooking() throws Exception{
-       
         WebElement elementBookingStartingPlace = driver.findElement(By.id("travel_booking_startingPlace"));
         elementBookingStartingPlace.clear();
         elementBookingStartingPlace.sendKeys("Shang Hai");
 
-        
         WebElement elementBookingTerminalPlace = driver.findElement(By.id("travel_booking_terminalPlace"));
         elementBookingTerminalPlace.clear();
         elementBookingTerminalPlace.sendKeys("Su Zhou");
 
-       
         String bookDate = "";
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         Calendar newDate = Calendar.getInstance();
@@ -111,31 +100,25 @@ public class TestBookErrorConfig {
         int randomDate = randDate.nextInt(26);
         newDate.add(Calendar.DATE, randomDate+5);
         bookDate=sdf.format(newDate.getTime());
-
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("document.getElementById('travel_booking_date').value='"+bookDate+"'");
 
-
-        
         WebElement elementBookingTraintype = driver.findElement(By.id("search_select_train_type"));
         Select selTraintype = new Select(elementBookingTraintype);
-        selTraintype.selectByValue(trainType); //ALL
+        selTraintype.selectByValue(trainType); 
 
-        
         WebElement elementBookingSearchBtn = driver.findElement(By.id("travel_booking_button"));
         elementBookingSearchBtn.click();
         Thread.sleep(30000);
 
         List<WebElement> ticketsList = driver.findElements(By.xpath("//table[@id='tickets_booking_list_table']/tbody/tr"));
-       
+
         if (ticketsList.size() == 0) {
             elementBookingSearchBtn.click();
             ticketsList = driver.findElements(By.xpath("//table[@id='tickets_booking_list_table']/tbody/tr"));
         }
         if(ticketsList.size() > 0) {
-           
             System.out.printf("Success to search tickets，the tickets list size is:%d%n",ticketsList.size());
-
         }
         else
             System.out.println("Tickets search failed!!!");
@@ -163,5 +146,4 @@ public class TestBookErrorConfig {
     public void tearDown() throws Exception {
         driver.quit();
     }
-
 }

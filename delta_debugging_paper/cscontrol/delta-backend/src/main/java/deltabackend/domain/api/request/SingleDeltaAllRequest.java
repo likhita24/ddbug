@@ -1,30 +1,29 @@
 package deltabackend.domain.api.request;
 
 import deltabackend.domain.configDelta.CMConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class SingleDeltaAllRequest {
-    private String serviceName;
+    private String sern;
     private List<CMConfig> configs = new ArrayList<CMConfig>();
-    private int numOfReplicas;
+    private int numR;
 
     public SingleDeltaAllRequest(){
 
     }
 
     public SingleDeltaAllRequest(String sn, int num){
-        this.serviceName = sn;
-        this.numOfReplicas = num;
+        this.sern = sn;
+        this.numR = num;
     }
 
     public String getServiceName() {
-        return serviceName;
+        return sern;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServiceName(String sern) {
+        this.sern = sern;
     }
 
     public List<CMConfig> getConfigs() {
@@ -36,14 +35,14 @@ public class SingleDeltaAllRequest {
     }
 
     public int getNumOfReplicas() {
-        return numOfReplicas;
+        return numR;
     }
 
-    public void setNumOfReplicas(int numOfReplicas) {
-        this.numOfReplicas = numOfReplicas;
+    public void setNumOfReplicas(int numR) {
+        this.numR = numR;
     }
 
     public String toString(){
-        return this.serviceName + ": { numOfReplicas: " + this.numOfReplicas + ", configs: " + this.configs.toString() + " }";
+        return this.sern + ": { numR: " + this.numR + ", configs: " + this.configs.toString() + " }";
     }
 }

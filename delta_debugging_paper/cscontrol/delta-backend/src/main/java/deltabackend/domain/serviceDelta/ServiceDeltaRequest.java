@@ -3,17 +3,16 @@ package deltabackend.domain.serviceDelta;
 import java.util.List;
 
 public class ServiceDeltaRequest {
-
     String id;
     List<String> tests;
-    String cluster;
+    String clus;
 
     public String getCluster() {
-        return cluster;
+        return clus;
     }
 
-    public void setCluster(String cluster) {
-        this.cluster = cluster;
+    public void setCluster(String clus) {
+        this.clus = clus;
     }
 
     public String getId() {
@@ -23,7 +22,6 @@ public class ServiceDeltaRequest {
     public void setId(String id) {
         this.id = id;
     }
-
 
     public List<String> getTests() {
         return tests;

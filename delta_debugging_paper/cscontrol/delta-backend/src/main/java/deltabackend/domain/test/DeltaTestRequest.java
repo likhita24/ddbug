@@ -3,25 +3,22 @@ package deltabackend.domain.test;
 import java.util.List;
 
 public class DeltaTestRequest {
-
-    String cluster;
-    List<String> testNames;
+    String clus;
+    List<String> tName;
 
     public String getCluster() {
-        return cluster;
+        return clus;
     }
 
-    public void setCluster(String cluster) {
-        this.cluster = cluster;
+    public void setCluster(String clus) {
+        this.clus = clus;
     }
 
     public List<String> getTestNames() {
-        return testNames;
+        return tName;
     }
 
-    public void setTestNames(List<String> testNames) {
-        this.testNames = testNames;
+    public void setTestNames(List<String> tName) {
+        this.tName = tName;
     }
-
-
 }

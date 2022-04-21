@@ -9,22 +9,15 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by ZDH on 2017/7/21.
- */
 public class TestServiceContacts {
     private WebDriver driver;
     private String baseUrl;
     @BeforeClass
     public void setUp() throws Exception {
-//        System.setProperty("webdriver.chrome.driver", "F:/app/new/chromedriver.exe");
-//        driver = new ChromeDriver();
-//        baseUrl = "http://10.141.211.179:30224";
         driver = new RemoteWebDriver(new URL("http://hub:4444/wd/hub"),
                 DesiredCapabilities.chrome());
         baseUrl = "http://10.141.212.21:30070";
@@ -36,7 +29,6 @@ public class TestServiceContacts {
         driver.findElement(By.id("refresh_contacts_button")).click();
         Thread.sleep(1000);
         List<WebElement> contactsList = driver.findElements(By.xpath("//table[@id='contacts_list_table']/tbody/tr"));
-        //List<WebElement> contactsList = driver.findElements(By.xpath("//table[@id='contacts_booking_list_table']/tbody/tr"));
         if(contactsList.size() > 0) {
             System.out.printf("Success,Contacts List's size is %d.%n", contactsList.size());
         }

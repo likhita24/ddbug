@@ -1,41 +1,37 @@
 package deltabackend.domain.api.response;
 
-
-
 import deltabackend.domain.bean.ServiceWithReplicas;
-
 import java.util.List;
 
 public class GetServicesListResponse {
-    private boolean status;
-    private String message;
-    private List<ServiceWithReplicas> services;
+    private boolean sts;
+    private String msg;
+    private List<ServiceWithReplicas> sers;
 
     public GetServicesListResponse(){
-
     }
 
     public boolean isStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatus(boolean sts) {
+        this.sts = sts;
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
 
     public List<ServiceWithReplicas> getServices() {
-        return services;
+        return sers;
     }
 
-    public void setServices(List<ServiceWithReplicas> services) {
-        this.services = services;
+    public void setServices(List<ServiceWithReplicas> sers) {
+        this.sers = sers;
     }
 }

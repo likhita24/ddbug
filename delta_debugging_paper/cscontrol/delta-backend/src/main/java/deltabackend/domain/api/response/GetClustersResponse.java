@@ -1,41 +1,37 @@
 package deltabackend.domain.api.response;
 
-
-
 import deltabackend.util.Cluster;
-
 import java.util.List;
 
 public class GetClustersResponse {
-    private boolean status;
-    private String message;
-    private List<Cluster> clusters;
+    private boolean sts;
+    private String msg;
+    private List<Cluster> clus;
 
     public GetClustersResponse(){
-
     }
 
     public boolean isStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatus(boolean sts) {
+        this.sts = sts;
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
 
     public List<Cluster> getClusters() {
-        return clusters;
+        return clus;
     }
 
-    public void setClusters(List<Cluster> clusters) {
-        this.clusters = clusters;
+    public void setClusters(List<Cluster> clus) {
+        this.clus = clus;
     }
 }

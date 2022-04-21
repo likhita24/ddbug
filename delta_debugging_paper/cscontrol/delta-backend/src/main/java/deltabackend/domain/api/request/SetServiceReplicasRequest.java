@@ -1,13 +1,10 @@
 package deltabackend.domain.api.request;
 
-
-
 import deltabackend.domain.bean.ServiceReplicasSetting;
-
 import java.util.List;
 
 public class SetServiceReplicasRequest {
-    private String clusterName;
+    private String Clus_name;
     private List<ServiceReplicasSetting> serviceReplicasSettings;
 
     public SetServiceReplicasRequest(){
@@ -15,11 +12,11 @@ public class SetServiceReplicasRequest {
     }
 
     public String getClusterName() {
-        return clusterName;
+        return Clus_name;
     }
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
+    public void setClusterName(String Clus_name) {
+        this.Clus_name = Clus_name;
     }
 
     public List<ServiceReplicasSetting> getServiceReplicasSettings() {

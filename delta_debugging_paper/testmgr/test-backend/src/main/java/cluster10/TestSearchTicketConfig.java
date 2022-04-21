@@ -13,7 +13,6 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,6 @@ public class TestSearchTicketConfig {
             if(null == result || result.size() <= 0){
                 throw new Exception("Something wrong");
             }
-//            Assert.assertEquals((null != result) && (result.size() > 0), true);
         } catch (HttpServerErrorException e){
             if(e.getRawStatusCode() == 500){
                 Assert.assertEquals(1,0);

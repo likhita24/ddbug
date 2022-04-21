@@ -10,63 +10,50 @@ import deltabackend.domain.configDelta.ConfigDeltaResponse;
 import deltabackend.domain.configDelta.NewSingleDeltaCMResourceRequest;
 import deltabackend.domain.test.DeltaTestRequest;
 import deltabackend.domain.test.DeltaTestResponse;
-
-
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.*;
 
-
 public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
-
-    private RestTemplate restTemplate = new RestTemplate();
-
-    private SimpMessagingTemplate template ;
-
-    private String sessionId;
-
-    private Map<String, String> unlimitMap = new HashMap<String, String>();
-
-    private List<SingleDeltaCMResourceRequest> orignalEnv;
-
-    private List<SingleDeltaCMResourceRequest> unlimitEnv;
-
-    private Map<String, SingleDeltaCMResourceRequest> deltaMap = new HashMap<String, SingleDeltaCMResourceRequest>();
-
-    private String expectException = "exception";
-
+    private RestTemplate res_Temp = new RestTemplate();
+    private SimpMessagingTemplate temp ;
+    private String s_Id;
+    private Map<String, String> ul_map = new HashMap<String, String>();
+    private List<SingleDeltaCMResourceRequest> env_org;
+    private List<SingleDeltaCMResourceRequest> env_ul;
+    private Map<String, SingleDeltaCMResourceRequest> d_map = new HashMap<String, SingleDeltaCMResourceRequest>();
+    private String exp = "exception";
 
     public ConfigDDMinDeltaExt(List<String> tests, List<SingleDeltaCMResourceRequest> env, String id, SimpMessagingTemplate t, List<String> cs) {
         super();
         clusters = cs;
-        unlimitMap.put("memory", "1000Mi");
-        unlimitMap.put("cpu", "500m");
-        unlimitEnv = new ArrayList<SingleDeltaCMResourceRequest>();
+        ul_map.put("memory", "1000Mi");
+        ul_map.put("cpu", "500m");
+        env_ul = new ArrayList<SingleDeltaCMResourceRequest>();
         for(SingleDeltaCMResourceRequest s : env){
             SingleDeltaCMResourceRequest a = new SingleDeltaCMResourceRequest();
             a.setServiceName(s.getServiceName());
             a.setType(s.getType());
             a.setKey(s.getKey());
-            a.setValue(unlimitMap.get(s.getKey()));
-            unlimitEnv.add(a);
+            a.setValue(ul_map.get(s.getKey()));
+            env_ul.add(a);
         }
 
         testcases = tests;
-        orignalEnv = env;
-        sessionId = id;
+        env_org = env;
+        s_Id = id;
         deltas_all = new ArrayList<String>();
-        template = t;
+        temp = t;
         for(SingleDeltaCMResourceRequest p: env){
             SingleDeltaCMResourceRequest q = new SingleDeltaCMResourceRequest();
             q.setServiceName(p.getServiceName());
             q.setType(p.getType());
             q.setKey(p.getKey());
             q.setValue(p.getValue());
-            deltaMap.put(q.getServiceName() + ":" + q.getType()+ ":" + q.getKey()+ ":" + q.getValue(), q);
+            d_map.put(q.getServiceName() + ":" + q.getType()+ ":" + q.getKey()+ ":" + q.getValue(), q);
             deltas_all.add(q.getServiceName() + ":" + q.getType()+ ":" + q.getKey()+ ":" + q.getValue());
         }
         expectError = "fail";
@@ -76,7 +63,7 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
 
     public boolean recoverEnv(){
         for(String s : clusters){
-            DeltaCMResourceResponse r1 = modifyConfigsOfServices(transformToNewConfigDS(orignalEnv), s);
+            DeltaCMResourceResponse r1 = modifyConfigsOfServices(transformToNewConfigDS(env_org), s);
             if(! r1.isStatus()){
                 return false;
             }
@@ -86,19 +73,12 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
 
 
     public boolean applyDelta(List<String> deltas, String cluster) {
-        // recovery to original cluster status
-//        DeltaCMResourceResponse r1 = modifyConfigsOfServices(unlimitEnv, cluster);
-//        if(! r1.isStatus()){
-//           return false;
-//        }
-
-        // apply delta
         List<SingleDeltaCMResourceRequest> env = new ArrayList<SingleDeltaCMResourceRequest>();
         for(String s: deltas){
-            SingleDeltaCMResourceRequest e = deltaMap.get(s);
+            SingleDeltaCMResourceRequest e = d_map.get(s);
             env.add(e);
         }
-        for(SingleDeltaCMResourceRequest sdcr1: unlimitEnv ){
+        for(SingleDeltaCMResourceRequest sdcr1: env_ul ){
             boolean toAdjust = false;
             for(SingleDeltaCMResourceRequest sdcr2: env){
                 if(sdcr1.getServiceName().equals(sdcr2.getServiceName()) && sdcr1.getType().equals(sdcr2.getType()) && sdcr1.getKey().equals(sdcr2.getKey()) ){
@@ -119,11 +99,11 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
     private List<NewSingleDeltaCMResourceRequest> transformToNewConfigDS(List<SingleDeltaCMResourceRequest> list){
         System.out.println("^^^^ transformToNewConfigDS original ^^^^^^ " + list);
 
-        List<NewSingleDeltaCMResourceRequest> newList = new ArrayList<NewSingleDeltaCMResourceRequest>();
-        Set<String> existService = new HashSet<String>();
+        List<NewSingleDeltaCMResourceRequest> list_n = new ArrayList<NewSingleDeltaCMResourceRequest>();
+        Set<String> eServ = new HashSet<String>();
         for(SingleDeltaCMResourceRequest l: list){
-            if(existService.contains(l.getServiceName())){
-                for(NewSingleDeltaCMResourceRequest d: newList){
+            if(eServ.contains(l.getServiceName())){
+                for(NewSingleDeltaCMResourceRequest d: list_n){
                     if(d.getServiceName().equals(l.getServiceName())){
                         int hasSameType = 0;
                         if( d.getConfigs().size() > 0){
@@ -144,7 +124,7 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
                     }
                 }
             } else {
-                existService.add(l.getServiceName());
+                eServ.add(l.getServiceName());
                 NewSingleDeltaCMResourceRequest newL = new NewSingleDeltaCMResourceRequest();
                 newL.setServiceName(l.getServiceName());
                 List<CMConfig> newConfig = new ArrayList<CMConfig>();
@@ -153,34 +133,34 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
                 cmc.addValues(new CM(l.getKey(), l.getValue()));
                 newConfig.add(cmc);
                 newL.setConfigs(newConfig);
-                newList.add(newL);
+                list_n.add(newL);
             }
         }
-        System.out.println("++++++++++ transformToNewConfigDS ++++++++++++ " + newList);
-        return newList;
+        System.out.println("++++++++++ transformToNewConfigDS ++++++++++++ " + list_n);
+        return list_n;
     }
 
 
     public String processAndGetResult(List<String> deltas, List<String> testcases, String cluster) {
         // execute testcases
-        DeltaTestResponse result = deltaTests(testcases, cluster);
+        DeltaTestResponse res = deltaTests(testcases, cluster);
         List<SingleDeltaCMResourceRequest> env = new ArrayList<SingleDeltaCMResourceRequest>();
         System.out.println();
         System.out.println("***** processAndGetResult *****   " + deltas);
         System.out.println();
         for(String s: deltas){
-            SingleDeltaCMResourceRequest e = deltaMap.get(s);
+            SingleDeltaCMResourceRequest e = d_map.get(s);
             env.add(e);
         }
-        responseToUser(env, result);
+        responseToUser(env, res);
 
         String returnResult = "";
-        if(result.getStatus() == 1){
+        if(res.getStatus() == 1){
             returnResult = expectPass;
-        } else if(result.getStatus() == 0){
+        } else if(res.getStatus() == 0){
             returnResult = expectError;
         } else {
-            returnResult = expectException;
+            returnResult = exp;
         }
         System.out.println("******** returnResult *******" + returnResult);
         return returnResult;
@@ -191,10 +171,10 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
         DeltaTestRequest dtr = new DeltaTestRequest();
         dtr.setTestNames(testNames);
         dtr.setCluster(cluster);
-        DeltaTestResponse result = restTemplate.postForObject(
+        DeltaTestResponse res = res_Temp.postForObject(
                 "http://test-backend:5001/testBackend/deltaTest",dtr,
                 DeltaTestResponse.class);
-        return result;
+        return res;
     }
 
 
@@ -206,7 +186,7 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
         for(NewSingleDeltaCMResourceRequest e: env){
             System.out.println("--modifyConfigsOfServices--" + cluster + ": " + e.getServiceName() + ": " + e.getConfigs() );
         }
-        DeltaCMResourceResponse r = restTemplate.postForObject(
+        DeltaCMResourceResponse r = res_Temp.postForObject(
                 "http://api-server:18898/api/deltaCMResource",dcr,
                 DeltaCMResourceResponse.class);
         System.out.println("--modifyConfigsOfServices--" + r.isStatus() + ": " + r.getMessage());
@@ -214,24 +194,24 @@ public class ConfigDDMinDeltaExt extends ParallelDDMinDelta {
         return r;
     }
 
-    //////////////////////////////////// send result to user ////////////////////////////////////////////////////
-    private void responseToUser(List<SingleDeltaCMResourceRequest> env, DeltaTestResponse result){
+    //////////////////////////////////// send res to user ////////////////////////////////////////////////////
+    private void responseToUser(List<SingleDeltaCMResourceRequest> env, DeltaTestResponse res){
         ConfigDeltaResponse dr = new ConfigDeltaResponse();
-        if(result.getStatus() == -1){ //the backend throw an exception, stop the delta test, maybe the testcase not exist
+        if(res.getStatus() == -1){ //the backend throw an exception, stop the delta test, maybe the testcase not exist
             dr.setStatus(false);
-            dr.setMessage(result.getMessage());
-            template.convertAndSendToUser(sessionId,"/topic/configDeltaResponse" ,dr, createHeaders(sessionId));
+            dr.setMessage(res.getMessage());
+            temp.convertAndSendToUser(s_Id,"/topic/configDeltaResponse" ,dr, createHeaders(s_Id));
         }
         dr.setStatus(true);//just mean the test case has been executed
         dr.setEnv(env);
-        dr.setMessage(result.getMessage());
-        dr.setResult(result);
-        template.convertAndSendToUser(sessionId,"/topic/configDeltaResponse" ,dr, createHeaders(sessionId));
+        dr.setMessage(res.getMessage());
+        dr.setResult(res);
+        temp.convertAndSendToUser(s_Id,"/topic/configDeltaResponse" ,dr, createHeaders(s_Id));
     }
 
-    private MessageHeaders createHeaders(String sessionId) {
+    private MessageHeaders createHeaders(String s_Id) {
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
+        headerAccessor.setSessionId(s_Id);
         headerAccessor.setLeaveMutable(true);
         return headerAccessor.getMessageHeaders();
     }

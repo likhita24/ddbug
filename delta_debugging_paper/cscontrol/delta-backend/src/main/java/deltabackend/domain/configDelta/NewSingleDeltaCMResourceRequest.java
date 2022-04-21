@@ -3,28 +3,26 @@ package deltabackend.domain.configDelta;
 import java.util.List;
 
 public class NewSingleDeltaCMResourceRequest {
-    private String serviceName;
-    private List<CMConfig> configs;
+    private String sern;
+    private List<CMConfig> confs;
 
     public NewSingleDeltaCMResourceRequest(){
 
     }
 
-
-
     public String getServiceName() {
-        return serviceName;
+        return sern;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServiceName(String sern) {
+        this.sern = sern;
     }
 
     public List<CMConfig> getConfigs() {
-        return configs;
+        return confs;
     }
 
-    public void setConfigs(List<CMConfig> configs) {
-        this.configs = configs;
+    public void setConfigs(List<CMConfig> confs) {
+        this.confs = confs;
     }
 }

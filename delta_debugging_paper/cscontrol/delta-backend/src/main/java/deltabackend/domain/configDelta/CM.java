@@ -1,35 +1,35 @@
 package deltabackend.domain.configDelta;
 
 public class CM {
-    private String key;
-    private String value;
+    private String imp;
+    private String val;
 
     public CM(){
 
     }
 
-    public CM(String key, String value){
-        this.key = key;
-        this.value = value;
+    public CM(String imp, String val){
+        this.imp = imp;
+        this.val = val;
     }
 
     public String getKey() {
-        return key;
+        return imp;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setKey(String imp) {
+        this.imp = imp;
     }
 
     public String getValue() {
-        return value;
+        return val;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(String val) {
+        this.val = val;
     }
 
     public String toString(){
-        return this.key + ": " + this.value;
+        return this.imp + ": " + this.val;
     }
 }

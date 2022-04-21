@@ -21,32 +21,30 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.client.RestTemplate;
-
 import java.util.*;
 
 public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
-    private RestTemplate restTemplate = new RestTemplate();
-    private SimpMessagingTemplate template ;
-    private String sessionId;
-    private String expectException = "exception";
-    //config
-    private Map<String, String> configUnlimitMap = new HashMap<String, String>();
-    private List<SingleDeltaCMResourceRequest> configOrignalEnv;
-    private List<SingleDeltaCMResourceRequest> configUnlimitEnv;
-    private Map<String, SingleDeltaCMResourceRequest> configDeltaMap = new HashMap<String, SingleDeltaCMResourceRequest>();
+    private RestTemplate res_temp = new RestTemplate();
+    private SimpMessagingTemplate temp ;
+    private String s_Id;
+    private String exp = "exception";
+    private Map<String, String> conf_ulMap = new HashMap<String, String>();
+    private List<SingleDeltaCMResourceRequest> conf_envOrg;
+    private List<SingleDeltaCMResourceRequest> conf_ulOrg;
+    private Map<String, SingleDeltaCMResourceRequest> conf_dMap = new HashMap<String, SingleDeltaCMResourceRequest>();
     //sequence
     private Stack<String> seqNum = new Stack<String>();
     private Map<String, String> preToSender = new HashMap<String, String>();
     private Map<String, ArrayList<String>> preToReceivers = new HashMap<String, ArrayList<String>>();
     //instance
-    private int instanceDeltaN = 2;
-    private List<ServiceWithReplicas> instanceOrignalEnv = new ArrayList<ServiceWithReplicas>();
-    private Map<String, ServiceWithReplicas> instanceDeltaMap = new HashMap<String, ServiceWithReplicas>();
+    private int ins_DN = 2;
+    private List<ServiceWithReplicas> ins_envOrg = new ArrayList<ServiceWithReplicas>();
+    private Map<String, ServiceWithReplicas> ins_dMap = new HashMap<String, ServiceWithReplicas>();
 
     public MixerDDMinDeltaExt(List<String> tests, List<SingleSequenceDelta> seqGroups, List<String> instances, List<SingleDeltaCMResourceRequest> configs, String id, SimpMessagingTemplate t, List<String> cs) {
         super();
-        configUnlimitMap.put("memory", "800Mi");
-        configUnlimitMap.put("cpu", "500m");
+        conf_ulMap.put("memory", "800Mi");
+        conf_ulMap.put("cpu", "500m");
         seqNum.push("D");
         seqNum.push("C");
         seqNum.push("B");
@@ -55,8 +53,8 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         expectError = "fail";
         expectPass = "pass";
         testcases = tests;
-        sessionId = id;
-        template = t;
+        s_Id = id;
+        temp = t;
         clusters = cs;
         deltas_all = new ArrayList<String>();
 
@@ -64,25 +62,25 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         for(String p: instances){
             ServiceWithReplicas q = new ServiceWithReplicas();
             q.setServiceName(p);
-            q.setNumOfReplicas(instanceDeltaN);
-            instanceDeltaMap.put("instance_" + p, q);
+            q.setNumOfReplicas(ins_DN);
+            ins_dMap.put("instance_" + p, q);
             deltas_all.add("instance_" + p);
 
             ServiceWithReplicas w = new ServiceWithReplicas();
             w.setServiceName(p);
             w.setNumOfReplicas(1);
-            instanceOrignalEnv.add(w);
+            ins_envOrg.add(w);
         }
         //config
-        configOrignalEnv = configs;
-        configUnlimitEnv = new ArrayList<SingleDeltaCMResourceRequest>();
+        conf_envOrg = configs;
+        conf_ulOrg = new ArrayList<SingleDeltaCMResourceRequest>();
         for(SingleDeltaCMResourceRequest s : configs){
             SingleDeltaCMResourceRequest a = new SingleDeltaCMResourceRequest();
             a.setServiceName(s.getServiceName());
             a.setType(s.getType());
             a.setKey(s.getKey());
-            a.setValue(configUnlimitMap.get(s.getKey()));
-            configUnlimitEnv.add(a);
+            a.setValue(conf_ulMap.get(s.getKey()));
+            conf_ulOrg.add(a);
         }
         for(SingleDeltaCMResourceRequest p: configs){
             SingleDeltaCMResourceRequest q = new SingleDeltaCMResourceRequest();
@@ -90,7 +88,7 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
             q.setType(p.getType());
             q.setKey(p.getKey());
             q.setValue(p.getValue());
-            configDeltaMap.put("config_" + q.getServiceName() + ":" + q.getType()+ ":" + q.getKey()+ ":" + q.getValue(), q);
+            conf_dMap.put("config_" + q.getServiceName() + ":" + q.getType()+ ":" + q.getKey()+ ":" + q.getValue(), q);
             deltas_all.add("config_" + q.getServiceName() + ":" + q.getType()+ ":" + q.getKey()+ ":" + q.getValue());
         }
         //sequence
@@ -121,58 +119,22 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
                 }
             }
         }
-
-//        String prefix = "seq" + seqNum.pop();
-//        preToSender.put(prefix, sender);
-//        ArrayList<String> l = new ArrayList<String>(); //put inside-payment in the first
-//        for(String a : receivers){
-//            if(a.contains("inside")){
-//                l.add(a);
-//            }
-//        }
-//        for(String a : receivers){
-//            if( ! a.contains("inside")){
-//                l.add(a);
-//            }
-//        }
-//        System.out.println("------ New List -----" + l);
-//        preToReceivers.put(prefix, l);
-//        int sequenceSize = receivers.size();
-//        for(int i = 0; i < sequenceSize-1; i++){
-//            for(int j = i + 1; j < sequenceSize; j++){
-//                deltas_all.add( prefix + "_" + sequenceSize + "_" + (i+1) +  "_" + (j+1) );
-//            }
-//        }
-
         System.out.print("@@@@@@@@@ deltas_all @@@@@@@@@@@" + deltas_all);
     }
 
     /////////////////////apply delta //////////////////////////////////////
 
     public boolean applyDelta(List<String> deltas, String cluster) {
-        /* recovery to original cluster status*/
-        //instance
-//        SetServiceReplicasResponse ssrr1 = setInstanceNumOfServices(instanceOrignalEnv, cluster);
-//        if(! ssrr1.isStatus()){
-//            return false;
-//        }
-        //config
-//        DeltaCMResourceResponse r1 = modifyConfigsOfServices(configUnlimitEnv, cluster);
-//        if(! r1.isStatus()){
-//            return false;
-//        }
-
         System.out.println("******** applyDelta deltas ***********" + deltas);
-        /*apply delta*/
         //instance
         List<ServiceWithReplicas> instanceEnv = new ArrayList<ServiceWithReplicas>();
         for(String s: deltas){
             if(s.contains("instance_")){
-                ServiceWithReplicas e = instanceDeltaMap.get(s);
+                ServiceWithReplicas e = ins_dMap.get(s);
                 instanceEnv.add(e);
             }
         }
-        for(ServiceWithReplicas swr1: instanceOrignalEnv){
+        for(ServiceWithReplicas swr1: ins_envOrg){
             boolean toAdjust = false;
             for(ServiceWithReplicas swr2: instanceEnv){
                 if(swr1.getServiceName().equals(swr2.getServiceName())){
@@ -183,24 +145,15 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
                 instanceEnv.add(swr1);
             }
         }
-//        if(instanceEnv.size() > 0){
-//            System.out.println();
-//            System.out.println("$$$$ instanceEnv: $$$$ " + instanceEnv);
-//            SetServiceReplicasResponse ssrr2 = setInstanceNumOfServices(instanceEnv, cluster);
-//            if( ! ssrr2.isStatus()){
-//                return false;
-//            }
-//        }
-
         //config
         List<SingleDeltaCMResourceRequest> configEnv = new ArrayList<SingleDeltaCMResourceRequest>();
         for(String s: deltas){
            if(s.contains("config_")){
-               SingleDeltaCMResourceRequest e = configDeltaMap.get(s);
+               SingleDeltaCMResourceRequest e = conf_dMap.get(s);
                configEnv.add(e);
            }
         }
-        for(SingleDeltaCMResourceRequest sdcr1: configUnlimitEnv ){
+        for(SingleDeltaCMResourceRequest sdcr1: conf_ulOrg ){
             boolean toAdjust = false;
             for(SingleDeltaCMResourceRequest sdcr2: configEnv){
                 if(sdcr1.getServiceName().equals(sdcr2.getServiceName()) && sdcr1.getType().equals(sdcr2.getType()) && sdcr1.getKey().equals(sdcr2.getKey()) ){
@@ -211,15 +164,6 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
                 configEnv.add(sdcr1);
             }
         }
-//        if(configEnv.size() > 0){
-//            System.out.println();
-//            System.out.println("$$$$ configEnv: $$$$ " + configEnv);
-//            DeltaCMResourceResponse r2 = modifyConfigsOfServices(transformToNewConfigDS(configEnv), cluster);
-//            if( ! r2.isStatus()){
-//                return false;
-//            }
-//        }
-
         //delta Configs & Instances simultaneously
         List<SingleDeltaAllRequest> o = toDeltaAllDS(instanceEnv, configEnv);
         if(null != o  && o.size() > 0){
@@ -228,8 +172,6 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
                 return false;
             }
         }
-
-
 
         //sequence
         List<String> seqDeltas = new ArrayList<String>();
@@ -278,14 +220,13 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         return true;
     }
 
-
     private SetAsyncRequestSequenceResponse controlSequence(String sender, ArrayList<String> receivers, String cluster) {
         SetAsyncRequestSequenceRequestWithSource sar = new SetAsyncRequestSequenceRequestWithSource();
         sar.setSourceName(sender);
         sar.setSvcList(receivers);
         sar.setClusterName(cluster);
         System.out.println("---- controlSequence ----" + receivers);
-        SetAsyncRequestSequenceResponse r = restTemplate.postForObject(
+        SetAsyncRequestSequenceResponse r = res_temp.postForObject(
                 "http://api-server:18898/api/setAsyncRequestSequenceWithSrcCombineWithFullSuspend",sar,
                 SetAsyncRequestSequenceResponse.class);
         System.out.println("--controlSequence--" + r.isStatus() + ": " + r.getMessage());
@@ -360,7 +301,7 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         DeltaAllRequest dar = new DeltaAllRequest();
         dar.setClusterName(cluster);
         dar.setDeltaRequests(d);
-        SimpleResponse sr = restTemplate.postForObject(
+        SimpleResponse sr = res_temp.postForObject(
                 "http://api-server:18898/api/deltaAll",dar,
                 SimpleResponse.class);
         System.out.println("-- sendAllDelta --" + sr.isStatus() + ": " + sr.getMessage());
@@ -368,37 +309,13 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         return sr;
     }
 
-//    private SetServiceReplicasResponse setInstanceNumOfServices(List<ServiceWithReplicas> env, String cluster) {
-//        SetServiceReplicasRequest ssrr = new SetServiceReplicasRequest();
-//        List<ServiceReplicasSetting> l = new ArrayList<ServiceReplicasSetting>();
-//        for(ServiceWithReplicas swr: env){
-//            ServiceReplicasSetting srs = new ServiceReplicasSetting();
-//            srs.setServiceName(swr.getServiceName());
-//            srs.setNumOfReplicas(swr.getNumOfReplicas());
-//            l.add(srs);
-//        }
-//        ssrr.setServiceReplicasSettings(l);
-//        ssrr.setClusterName(cluster);
-//
-//        System.out.println();
-//        for(ServiceWithReplicas e: env){
-//            System.out.println("--setInstanceNumOfServices--" + e.getServiceName() + ": " + e.getNumOfReplicas());
-//        }
-//        SetServiceReplicasResponse ssresult = restTemplate.postForObject(
-//                "http://api-server:18898/api/setReplicas",ssrr,
-//                SetServiceReplicasResponse.class);
-//        System.out.println("--setInstanceNumOfServices--" + ssresult.isStatus() + ": " + ssresult.getMessage());
-//        System.out.println();
-//        return ssresult;
-//    }
-
     private SetAsyncRequestSequenceResponse releaseControl(String sender, ArrayList<String> receivers, String cluster) {
         SetAsyncRequestSequenceRequestWithSource sar = new SetAsyncRequestSequenceRequestWithSource();
         sar.setSourceName(sender);
         sar.setSvcList(receivers);
         sar.setClusterName(cluster);
         System.out.println("------ Recovering ----");
-        SetAsyncRequestSequenceResponse r = restTemplate.postForObject(
+        SetAsyncRequestSequenceResponse r = res_temp.postForObject(
                 "http://api-server:18898/api/unsuspendAllRequests",sar,
                 SetAsyncRequestSequenceResponse.class);
         System.out.println("----  Recovering  --" + r.isStatus() + ": " + r.getMessage());
@@ -406,25 +323,6 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
 
         return r;
     }
-
-
-
-
-//    private DeltaCMResourceResponse modifyConfigsOfServices(List<NewSingleDeltaCMResourceRequest> env, String cluster) {
-//        DeltaCMResourceRequest dcr = new DeltaCMResourceRequest();
-//        dcr.setDeltaRequests(env);
-//        dcr.setClusterName(cluster);
-//        System.out.println();
-//        for(NewSingleDeltaCMResourceRequest e: env){
-//            System.out.println("--modifyConfigsOfServices--" + cluster + ": " + e.getServiceName() + ": " + e.getConfigs());
-//        }
-//        DeltaCMResourceResponse r = restTemplate.postForObject(
-//                "http://api-server:18898/api/deltaCMResource",dcr,
-//                DeltaCMResourceResponse.class);
-//        System.out.println("--modifyConfigsOfServices--" + r.isStatus() + ": " + r.getMessage());
-//        System.out.println();
-//        return r;
-//    }
 
     ///////////////////////////////////Test/////////////////////////////////////////
 
@@ -445,12 +343,12 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         List<ServiceWithReplicas> instanceEnv = new ArrayList<ServiceWithReplicas>();
         for(String s: deltas){
             if(s.contains("config_")){
-                SingleDeltaCMResourceRequest e = configDeltaMap.get(s);
+                SingleDeltaCMResourceRequest e = conf_dMap.get(s);
                 configEnv.add(e);
             } else if(s.contains("seq")){
                 seqDeltas.add(s);
             } else if(s.contains("instance_")){
-                ServiceWithReplicas e = instanceDeltaMap.get(s);
+                ServiceWithReplicas e = ins_dMap.get(s);
                 instanceEnv.add(e);
             }
         }
@@ -462,7 +360,7 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         } else if(result.getStatus() == 0){
             returnResult = expectError;
         } else {
-            returnResult = expectException;
+            returnResult = exp;
         }
         System.out.println("******** returnResult *******" + returnResult);
         return returnResult;
@@ -472,7 +370,7 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         DeltaTestRequest dtr = new DeltaTestRequest();
         dtr.setTestNames(testNames);
         dtr.setCluster(cluster);
-        DeltaTestResponse result = restTemplate.postForObject(
+        DeltaTestResponse result = res_temp.postForObject(
                 "http://test-backend:5001/testBackend/deltaTest",dtr,
                 DeltaTestResponse.class);
         return result;
@@ -521,7 +419,6 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         return m;
     }
 
-
     private List<String>  getSequenceFinalResult(List<String> ddminResult){
         List<String> r = new ArrayList<String>();
         if(null != ddminResult && ddminResult.size() > 0){
@@ -548,7 +445,7 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         if(result.getStatus() == -1){ //the backend throw an exception, stop the delta test, maybe the testcase not exist
             mdr.setStatus(false);
             mdr.setMessage(result.getMessage());
-            template.convertAndSendToUser(sessionId,"/topic/mixerDeltaResponse" ,mdr, createHeaders(sessionId));
+            temp.convertAndSendToUser(s_Id,"/topic/mixerDeltaResponse" ,mdr, createHeaders(s_Id));
         }
         mdr.setStatus(true);//just mean the test case has been executed
         mdr.setConfigEnv(configEnv);
@@ -556,12 +453,12 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         mdr.setSeqEnv(seqEnv);
         mdr.setMessage(result.getMessage());
         mdr.setResult(result);
-        template.convertAndSendToUser(sessionId,"/topic/mixerDeltaResponse" ,mdr, createHeaders(sessionId));
+        temp.convertAndSendToUser(s_Id,"/topic/mixerDeltaResponse" ,mdr, createHeaders(s_Id));
     }
 
-    private MessageHeaders createHeaders(String sessionId) {
+    private MessageHeaders createHeaders(String s_Id) {
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
+        headerAccessor.setSessionId(s_Id);
         headerAccessor.setLeaveMutable(true);
         return headerAccessor.getMessageHeaders();
     }
@@ -581,23 +478,13 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
 
     private boolean recoverInstancesAndConfigs(){
         for(String s : clusters){
-            SimpleResponse r1 = sendAllDelta(toDeltaAllDS(instanceOrignalEnv, configOrignalEnv), s);
+            SimpleResponse r1 = sendAllDelta(toDeltaAllDS(ins_envOrg, conf_envOrg), s);
             if(! r1.isStatus()){
                 return false;
             }
         }
         return true;
     }
-
-//    private boolean recoverConfigEnv(){
-//        for(String s : clusters){
-//            DeltaCMResourceResponse r1 = modifyConfigsOfServices(transformToNewConfigDS(configOrignalEnv), s);
-//            if(! r1.isStatus()){
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
 
     private boolean recoverSequenceEnv(){
         for(String c: clusters){
@@ -612,15 +499,4 @@ public class MixerDDMinDeltaExt extends ParallelDDMinDelta {
         }
         return true;
     }
-
-//    private boolean recoverInstanceEnv(){
-//        for(String s : clusters){
-//            SetServiceReplicasResponse ssrr1 = setInstanceNumOfServices(instanceOrignalEnv, s);
-//            if(! ssrr1.isStatus()){
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
 }

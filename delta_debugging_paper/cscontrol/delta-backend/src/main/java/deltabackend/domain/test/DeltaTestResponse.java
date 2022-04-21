@@ -5,39 +5,35 @@ import java.util.List;
 
 public class DeltaTestResponse {
 
-    private int status;//0:FAUILUE; 1:SUCCESS; -1:EXCEPTION
-    private String message;
-    List<DeltaTestResult> deltaResults = new ArrayList<DeltaTestResult>();
+    private int sts;
+    private String msg;
+    List<DeltaTestResult> dRes = new ArrayList<DeltaTestResult>();
 
     public int getStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setStatus(int sts) {
+        this.sts = sts;
     }
-
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
-
 
     public List<DeltaTestResult> getDeltaResults() {
-        return deltaResults;
+        return dRes;
     }
 
-    public void setDeltaResults(List<DeltaTestResult> result) {
-        this.deltaResults = result;
+    public void setDeltaResults(List<DeltaTestResult> res) {
+        this.dRes = res;
     }
 
     public void addDeltaResult(DeltaTestResult d){
-        deltaResults.add(d);
+        dRes.add(d);
     }
-
-
 }

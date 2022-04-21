@@ -13,7 +13,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic");// /users 默认通知
+        config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
     }
 
@@ -21,7 +21,6 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/delta-socket").setAllowedOrigins("*").withSockJS();
     }
-
 
     @Bean
     public SocketSessionRegistry SocketSessionRegistry(){

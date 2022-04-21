@@ -1,26 +1,26 @@
 package deltabackend.domain.api.response;
 
 public class DeltaCMResourceResponse {
-    private boolean status;
-    private String message;
+    private boolean sts;
+    private String msg;
 
     public DeltaCMResourceResponse(){
 
     }
 
     public boolean isStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatus(boolean sts) {
+        this.sts = sts;
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
 }

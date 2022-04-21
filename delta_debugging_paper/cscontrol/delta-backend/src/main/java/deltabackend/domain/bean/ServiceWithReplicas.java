@@ -1,30 +1,29 @@
 package deltabackend.domain.bean;
 
 public class ServiceWithReplicas {
-    private String serviceName;
-    private int numOfReplicas;
+    private String sern;
+    private int numR;
 
     public ServiceWithReplicas(){
-
     }
 
     public String getServiceName() {
-        return serviceName;
+        return sern;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServiceName(String sern) {
+        this.sern = sern;
     }
 
     public int getNumOfReplicas() {
-        return numOfReplicas;
+        return numR;
     }
 
-    public void setNumOfReplicas(int numOfReplicas) {
-        this.numOfReplicas = numOfReplicas;
+    public void setNumOfReplicas(int numR) {
+        this.numR = numR;
     }
 
     public String toString(){
-        return this.serviceName + ": " + this.numOfReplicas;
+        return this.sern + ": " + this.numR;
     }
 }

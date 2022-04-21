@@ -1,37 +1,36 @@
 package deltabackend.domain.test;
 
 public class DeltaTestResult {
-
-    String status; //failure/success
-    String className;
-    long duration = 0;//how long it run
+    String sts; 
+    String cName;
+    long dur = 0;
 
     public DeltaTestResult(){
 
     }
 
     public String getStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatus(String sts) {
+        this.sts = sts;
     }
 
     public String getClassName() {
-        return className;
+        return cName;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setClassName(String cName) {
+        this.cName = cName;
     }
 
     public long getDuration() {
-        return duration;
+        return dur;
     }
 
-    public void setDuration(long duration) {
-        this.duration = duration;
+    public void setDuration(long dur) {
+        this.dur = dur;
     }
 
 }

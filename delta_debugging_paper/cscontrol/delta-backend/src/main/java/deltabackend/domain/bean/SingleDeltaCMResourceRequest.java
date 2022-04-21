@@ -1,48 +1,47 @@
 package deltabackend.domain.bean;
 
 public class SingleDeltaCMResourceRequest {
-    private String serviceName;
-    private String type;
-    private String key;
-    private String value;
+    private String sern;
+    private String typ;
+    private String imp;
+    private String val;
 
     public SingleDeltaCMResourceRequest(){
-
     }
 
     public String getServiceName() {
-        return serviceName;
+        return sern;
     }
 
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
+    public void setServiceName(String sern) {
+        this.sern = sern;
     }
 
     public String getType() {
-        return type;
+        return typ;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType(String typ) {
+        this.typ = typ;
     }
 
     public String getKey() {
-        return key;
+        return imp;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setKey(String imp) {
+        this.imp = imp;
     }
 
     public String getValue() {
-        return value;
+        return val;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(String val) {
+        this.val = val;
     }
 
     public String toString(){
-        return this.serviceName + ": " + this.type + ": " + this.key + ": " + this.value;
+        return this.sern + ": " + this.typ + ": " + this.imp + ": " + this.val;
     }
 }

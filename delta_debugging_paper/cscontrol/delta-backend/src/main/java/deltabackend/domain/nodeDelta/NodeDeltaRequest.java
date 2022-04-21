@@ -3,19 +3,17 @@ package deltabackend.domain.nodeDelta;
 import java.util.List;
 
 public class NodeDeltaRequest {
-
     String id;
-    List<String> nodeNames;
-    String cluster = null;
+    List<String> nName;
+    String clus = null;
 
     public String getCluster() {
-        return cluster;
+        return clus;
     }
 
-    public void setCluster(String cluster) {
-        this.cluster = cluster;
+    public void setCluster(String clus) {
+        this.clus = clus;
     }
-
 
     public String getId() {
         return id;
@@ -26,11 +24,11 @@ public class NodeDeltaRequest {
     }
 
     public List<String> getNodeNames() {
-        return nodeNames;
+        return nName;
     }
 
-    public void setNodeNames(List<String> nodeNames) {
-        this.nodeNames = nodeNames;
+    public void setNodeNames(List<String> nName) {
+        this.nName = nName;
     }
 
 }

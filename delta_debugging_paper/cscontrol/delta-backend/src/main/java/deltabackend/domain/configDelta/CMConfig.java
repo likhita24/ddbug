@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CMConfig {
-    private String type;
+    private String typ;
     private List<CM> values = new ArrayList<>();
 
     public CMConfig(){
-
     }
 
     public void addValues(CM c){
@@ -16,11 +15,11 @@ public class CMConfig {
     }
 
     public String getType() {
-        return type;
+        return typ;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setType(String typ) {
+        this.typ = typ;
     }
 
     public List<CM> getValues() {
@@ -32,6 +31,6 @@ public class CMConfig {
     }
 
     public String toString(){
-        return this.type + ": " + this.values;
+        return this.typ + ": " + this.values;
     }
 }

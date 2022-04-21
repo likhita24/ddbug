@@ -4,20 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SequenceDeltaRequest {
-
     String id;
-    List<SingleSequenceDelta> seqGroups;
+    List<SingleSequenceDelta> ord_grps;
     List<String> tests;
 
-
     public List<SingleSequenceDelta> getSeqGroups() {
-        return seqGroups;
+        return ord_grps;
     }
 
-    public void setSeqGroups(List<SingleSequenceDelta> seqGroups) {
-        this.seqGroups = seqGroups;
+    public void setSeqGroups(List<SingleSequenceDelta> ord_grps) {
+        this.ord_grps = ord_grps;
     }
-
 
     public String getId() {
         return id;
@@ -26,8 +23,6 @@ public class SequenceDeltaRequest {
     public void setId(String id) {
         this.id = id;
     }
-
-
 
     public List<String> getTests() {
         return tests;
@@ -40,6 +35,4 @@ public class SequenceDeltaRequest {
     public SequenceDeltaRequest(){
 
     }
-
-
 }

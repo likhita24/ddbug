@@ -1,25 +1,22 @@
 package deltabackend.domain.api.request;
 
-
-
 import deltabackend.domain.configDelta.NewSingleDeltaCMResourceRequest;
-
 import java.util.List;
 
 public class DeltaCMResourceRequest {
-    private String clusterName;
+    private String Clus_name;
     private List<NewSingleDeltaCMResourceRequest> deltaRequests;
 
     public DeltaCMResourceRequest(){
 
     }
 
-    public String getClusterName() {
-        return clusterName;
+    public String getClus_name() {
+        return Clus_name;
     }
 
-    public void setClusterName(String clusterName) {
-        this.clusterName = clusterName;
+    public void setClus_name(String Clus_name) {
+        this.Clus_name = Clus_name;
     }
 
     public List<NewSingleDeltaCMResourceRequest> getDeltaRequests() {

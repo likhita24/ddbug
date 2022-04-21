@@ -1,33 +1,31 @@
 package deltabackend.domain.api.response;
 
 public class SetAsyncRequestSequenceResponse {
-
-    private boolean status;
-
-    private String message;
+    private boolean sts;
+    private String msg;
 
     public SetAsyncRequestSequenceResponse() {
         //do nothing
     }
 
-    public SetAsyncRequestSequenceResponse(boolean status, String message) {
-        this.status = status;
-        this.message = message;
+    public SetAsyncRequestSequenceResponse(boolean sts, String msg) {
+        this.sts = sts;
+        this.msg = msg;
     }
 
     public boolean isStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatus(boolean sts) {
+        this.sts = sts;
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
 }

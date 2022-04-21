@@ -4,32 +4,31 @@ import java.util.List;
 import java.util.Map;
 
 public class MixerDDMinResponse {
-    private boolean status;
-    private String message;
-    private Map<String, List<String>> ddminResult;
+    private boolean sts;
+    private String msg;
+    private Map<String, List<String>> res_ddmin;
 
     public boolean isStatus() {
-        return status;
+        return sts;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setStatus(boolean sts) {
+        this.sts = sts;
     }
 
     public String getMessage() {
-        return message;
+        return msg;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setMessage(String msg) {
+        this.msg = msg;
     }
 
     public Map<String, List<String>> getDdminResult() {
-        return ddminResult;
+        return res_ddmin;
     }
 
-    public void setDdminResult(Map<String, List<String>> ddminResult) {
-        this.ddminResult = ddminResult;
+    public void setDdminResult(Map<String, List<String>> res_ddmin) {
+        this.res_ddmin = res_ddmin;
     }
-
 }
